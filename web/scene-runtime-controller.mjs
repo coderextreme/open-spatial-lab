@@ -1,5 +1,7 @@
 import { SpatialPortalPreviewManager } from "./portal-spatial-preview.mjs?v=meeting-critical-destination";
 import { disposeHostedSceneObjectMeshes, syncHostedSceneObjectMeshes, } from "./portal-render-controller.mjs";
+import * as THREE from "three/webgpu";
+
 export function createSceneRuntimeController({ THREE, SceneClass, PortalPreviewManagerClass = SpatialPortalPreviewManager, AvatarLayerClass = null, buildWowScene, mountAirportTerminalContent, mountWowSceneAssets, mountCanonicalWorldContent, loadGltf, cloneScene, airportSceneContract, isPlayer, role, stageMode, sharedAvatarCompositing, motionPreference = null, getMount, documentTarget, windowTarget, locationHref, requestFrame, cancelFrame, getRuntime, getAvatarLayers, syncPeerAvatars, sceneRoleForDebug, alignPortalVisual, portalKey, setupNavigatorRender, onSceneChanged, onPortalAlignment, seedOrbitCamera, applyPlayerCamera, logLine, showToast, vec3Label, }) {
     let currentScene = null;
     let previewManager = null;
@@ -651,7 +653,8 @@ export function createSceneRuntimeController({ THREE, SceneClass, PortalPreviewM
         if (!built || !built.scene || !built.camera)
             throw new Error("alternate renderer requires a built scene");
         disposeCurrent("scene dispose during alternate mount failed");
-        const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true, alpha: false });
+        const renderer = new THREE.WebGPURenderer({ antialias: true, preserveDrawingBuffer: true, alpha: false });
+	renderer.init();
         renderer.setPixelRatio(1);
         renderer.setSize(width, height, false);
         const host = mount();

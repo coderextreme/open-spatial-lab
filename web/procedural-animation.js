@@ -1,4 +1,4 @@
-import * as THREE from "./vendor/scene-core/vendor/three/three.module.js";
+import * as THREE from "three/webgpu";
 export const MIXAMO_TO_VRM = Object.freeze({
     mixamorigHips: "hips",
     mixamorigSpine: "spine",

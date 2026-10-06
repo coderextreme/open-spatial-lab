@@ -11,6 +11,7 @@ const PORTAL_FRAME_PRESETS = Object.freeze({
     "location-a": { forward: [0, 0, 1] },
     "location-b": { forward: [-1, 0, 0] },
     "location-lobby": { forward: [0, 0, 1] },
+    "location-softbody": { forward: [0, 0, 1] },
 });
 export function clamp(value, min, max) {
     return Math.max(min, Math.min(max, value));

@@ -274,7 +274,7 @@ class Canvas2DScene {
     }
 }
 try {
-    const THREE = await import("./vendor/three/three.module.js");
+    const THREE = await import("three");
     WebGLScene._three = THREE;
 }
 catch (e) {

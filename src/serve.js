@@ -6,7 +6,7 @@ const ROOT = path.resolve(__dirname, '..');
 const WEB_ROOT = path.join(ROOT, 'web');
 const SCENE_CORE_ROOT = path.join(ROOT, 'runtime', 'scene-core', 'public');
 const NODE_MODULES = path.join(ROOT, 'node_modules');
-const DEFAULT_BACKEND_PORTS = Object.freeze({ a: 18151, b: 18152, lobby: 18153, airport: 18154 });
+const DEFAULT_BACKEND_PORTS = Object.freeze({ a: 18151, b: 18152, lobby: 18153, airport: 18154, softbody: 18155  });
 const WORLD_KEYS = new Set(Object.keys(DEFAULT_BACKEND_PORTS));
 const MIME = Object.freeze({
     '.css': 'text/css; charset=utf-8',
@@ -24,6 +24,7 @@ const MIME = Object.freeze({
     '.vrm': 'model/gltf-binary',
     '.woff': 'font/woff',
     '.woff2': 'font/woff2',
+    '.wasm': 'application/wasm',
 });
 function safeJoin(root, urlPath) {
     let decoded;
@@ -92,7 +93,7 @@ function proxyHttp(key, request, response, backendPorts) {
 }
 function proxyWebSocket(request, clientSocket, head, backendPorts) {
     const parsed = new URL(request.url, 'http://127.0.0.1');
-    const match = parsed.pathname.match(/^\/api\/(a|b|lobby|airport)\/(runtime-state|events)$/);
+    const match = parsed.pathname.match(/^\/api\/(a|b|softbody|lobby|airport)\/(runtime-state|events)$/);
     if (!match) {
         clientSocket.end('HTTP/1.1 404 Not Found\r\nConnection: close\r\n\r\n');
         return;
@@ -134,7 +135,7 @@ function createFrontendServer(port = 8143, options = {}) {
         const parsed = new URL(request.url, 'http://127.0.0.1');
         let urlPath = parsed.pathname;
         let worldKey = 'a';
-        const worldMatch = urlPath.match(/^\/w\/(a|b|lobby|airport)(\/.*)?$/);
+        const worldMatch = urlPath.match(/^\/w\/(a|b|softbody|lobby|airport)(\/.*)?$/);
         if (worldMatch) {
             worldKey = worldMatch[1];
             if (!worldMatch[2]) {
@@ -169,7 +170,7 @@ function createFrontendServer(port = 8143, options = {}) {
             proxyHttp(worldKey, request, response, backendPorts);
             return;
         }
-        const apiMatch = urlPath.match(/^\/api\/(a|b|lobby|airport)(?:\/|$)/);
+        const apiMatch = urlPath.match(/^\/api\/(a|b|softbody|lobby|airport)(?:\/|$)/);
         if (apiMatch) {
             proxyHttp(apiMatch[1], request, response, backendPorts);
             return;
@@ -221,6 +222,7 @@ if (require.main === module) {
         b: Number(process.env.BACKEND_B_PORT) || DEFAULT_BACKEND_PORTS.b,
         lobby: Number(process.env.BACKEND_LOBBY_PORT) || DEFAULT_BACKEND_PORTS.lobby,
         airport: Number(process.env.BACKEND_AIRPORT_PORT) || DEFAULT_BACKEND_PORTS.airport,
+        softbody: Number(process.env.BACKEND_SOFTBODY_PORT) || DEFAULT_BACKEND_PORTS.softbody,
     };
     createFrontendServer(port, { backendPorts }).catch((error) => {
         console.error(`Open Spatial Lab frontend failed: ${error.message}`);

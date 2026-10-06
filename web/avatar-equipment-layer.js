@@ -1,4 +1,4 @@
-import * as THREE from "./vendor/scene-core/vendor/three/three.module.js";
+import * as THREE from "three/webgpu";
 import { GLTFLoader } from "./vendor-three-examples/loaders/GLTFLoader.js";
 import { clone as cloneSkeleton } from "./vendor-three-examples/utils/SkeletonUtils.js";
 import { VRMLoaderPlugin } from "./vendor-vrm/three-vrm.module.js";
@@ -6,6 +6,7 @@ import { createRetargetedLocomotionClips } from "./procedural-animation.js";
 import { fetchAndParseGltf } from "./gltf-fetch-loader.mjs";
 import { createParametricAvatar, DEFAULT_AVATAR_PARAMS } from "./avatar/parametric-avatar.mjs";
 import { withBase } from "./base-path.mjs";
+
 const ATTACHMENT_PRESETS = {
     head: { position: [0, 1.55, 0.12], label: "head" },
     chest: { position: [0, 1.08, 0.16], label: "chest" },
@@ -641,14 +642,15 @@ export class AvatarEquipmentLayer {
             this.camera = this.host.camera || null;
         }
         else {
-            this.renderer = new THREE.WebGLRenderer({
+            this.renderer = new THREE.WebGPURenderer({
                 antialias: true,
                 alpha: true,
                 preserveDrawingBuffer: true,
                 failIfMajorPerformanceCaveat: false,
             });
+	    this.renderer.init();
             if (!this.renderer.getContext())
-                throw new Error("equipment layer WebGL context unavailable");
+                throw new Error("equipment layer WebGPU context unavailable");
             this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
             this.renderer.setSize(w, h);
             this.renderer.setClearColor(0x000000, 0);

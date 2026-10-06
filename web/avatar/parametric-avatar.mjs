@@ -1,4 +1,4 @@
-import * as THREE from "../vendor/scene-core/vendor/three/three.module.js";
+import * as THREE from "three";
 export const PARAMETRIC_AVATAR_VERSION = "0.1.0-runtime";
 export const DEFAULT_AVATAR_PARAMS = Object.freeze({
     id: "default",

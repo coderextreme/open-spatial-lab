@@ -32,8 +32,10 @@ function showLauncher({ dismissible = appStarted } = {}) {
     viewsButton?.setAttribute("aria-expanded", "true");
     teardownLauncher = mountDemoLauncher(mount, {
         airportAvailable: true,
+        softBodyAvailable: true,
         onDismiss: dismissible ? () => hideLauncher({ restoreFocus: true }) : undefined,
         launchPortalC: () => location.assign("./index.html?role=player&mission=denver-skyport"),
+        launchPortalD: () => location.assign("./softbody.html?role=player&mission=soft-body"),
     });
     mount.scrollTop = 0;
     const launcher = mount.querySelector(".demo-launcher");
@@ -49,11 +51,23 @@ async function startApp() {
     hideLauncher();
     await import("./app.js?v=1");
 }
+async function startSoftBody() {
+    if (appStarted)
+        return;
+    appStarted = true;
+    hideLauncher();
+    await import("./index.js");
+}
 viewsButton?.setAttribute("aria-expanded", "false");
 viewsButton?.addEventListener("click", () => showLauncher({ dismissible: true }));
 if (introPreference === "force" || (introPreference !== "bypass" && isBareEntry)) {
     showLauncher({ dismissible: false });
 }
 else {
-    await startApp();
+    if (location.href.indexOf("softbody.html") >= 0) {
+	console.error("Starting Soft body");
+    	await startSoftBody();
+    } else {
+    	await startApp();
+    }
 }

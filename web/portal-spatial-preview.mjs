@@ -1,4 +1,4 @@
-import * as THREE from "./vendor/scene-core/vendor/three/three.module.js";
+import * as THREE from "three/webgpu";
 import { addScaled3, clamp, fabricPortalKey, glueCameraThroughFrames, normalizeVec3, portalEntrySideAllowed, portalLocalCoordinates, properPortalLocalRotation, roundNumber, roundVec3, PORTAL_EXIT_OFFSET_MAX_M, PORTAL_TRIGGER_DEPTH_M, } from "./live-adapter-portal-geometry.mjs";
 function destWorldRingColor(locationId) {
     return String(locationId || "") === "location-b" ? 0xffc266 : 0x66e0ff;
@@ -1107,7 +1107,7 @@ export class SpatialPortalPreviewManager {
     _ensureRecord(portalKey, machine, portalEntry) {
         let rec = this.records.get(portalKey);
         if (!rec) {
-            const renderTarget = new THREE.WebGLRenderTarget(1, 1, {
+            const renderTarget = new THREE.RenderTarget(1, 1, {
                 minFilter: THREE.LinearFilter,
                 magFilter: THREE.LinearFilter,
             });

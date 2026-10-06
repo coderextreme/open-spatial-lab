@@ -11,6 +11,7 @@ const BACKEND_PORTS = {
     b: Number(process.env.OSL_BACKEND_B_PORT) || 18152,
     lobby: Number(process.env.OSL_BACKEND_LOBBY_PORT) || 18153,
     airport: Number(process.env.OSL_BACKEND_AIRPORT_PORT) || 18154,
+    softbody: Number(process.env.OSL_BACKEND_SOFTBODY_PORT) || 18155,
 };
 const BASE = `http://127.0.0.1:${FRONTEND_PORT}`;
 const sleep = (milliseconds) => new Promise((resolvePromise) => setTimeout(resolvePromise, milliseconds));
@@ -157,7 +158,7 @@ async function assertValidatedJson(url) {
     return response.json();
 }
 async function assertEnabledWowContracts() {
-    for (const world of ["a", "b", "lobby", "airport"]) {
+    for (const world of ["a", "b", "lobby", "airport", "softbody"]) {
         const worldResource = await assertValidatedJson(`${BASE}/api/${world}/wow/world`);
         await json(`${BASE}/api/${world}/wow/location`);
         await assertValidatedJson(`${BASE}/api/${world}/wow/user/1`);
@@ -255,12 +256,12 @@ async function main() {
     const receipt = run("launchOpenSpatialLab.sh");
     if (!receipt.includes("Open Spatial Lab is ready."))
         throw new Error("startup receipt missing");
-    for (const [port, location] of [[BACKEND_PORTS.a, "location-a"], [BACKEND_PORTS.b, "location-b"], [BACKEND_PORTS.lobby, "location-lobby"], [BACKEND_PORTS.airport, "location-airport"]]) {
+    for (const [port, location] of [[BACKEND_PORTS.a, "location-a"], [BACKEND_PORTS.b, "location-b"], [BACKEND_PORTS.lobby, "location-lobby"], [BACKEND_PORTS.airport, "location-airport"], [BACKEND_PORTS.softbody, "location-softbody"]]) {
         const health = await json(`http://127.0.0.1:${port}/healthz`);
         if (!health.ok || health.location_id !== location)
             throw new Error(`health check mismatch on ${port}`);
     }
-    for (const world of ["a", "b", "lobby", "airport"]) {
+    for (const world of ["a", "b", "lobby", "airport", softbody"]) {
         const user = await json(`${BASE}/api/${world}/wow/user/1`);
         const signature = user.open_user_manifest?.signature;
         if (!signature?.keyRef || !signature?.value)

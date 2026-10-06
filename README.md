@@ -63,6 +63,7 @@ Launcher:            http://127.0.0.1:8143/
 Lobby player:        http://127.0.0.1:8143/index.html?role=player&intro=bypass
 Location A observer: http://127.0.0.1:8143/index.html?role=source&intro=bypass
 Location B observer: http://127.0.0.1:8143/index.html?role=target&intro=bypass
+Soft Body  observer: http://127.0.0.1:8143/softbody.html&role=source&intro=bypass
 ```
 
 Open the launcher URL in a supported browser.

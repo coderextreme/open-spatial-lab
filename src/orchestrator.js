@@ -6,6 +6,7 @@ const PORTS = Object.freeze({
     b: Number(process.env.BACKEND_B_PORT) || 18152,
     lobby: Number(process.env.BACKEND_LOBBY_PORT) || 18153,
     airport: Number(process.env.BACKEND_AIRPORT_PORT) || 18154,
+    softbody: Number(process.env.BACKEND_SOFTBODY_PORT) || 18155,
 });
 function startWorld(role, portByLocation) {
     const base = makeConfig(role);
@@ -33,9 +34,10 @@ async function main() {
         'location-b': PORTS.b,
         'location-lobby': PORTS.lobby,
         'location-airport': PORTS.airport,
+        'location-softbody': PORTS.softbody,
     };
     const worlds = [];
-    for (const role of ['a', 'b', 'lobby', 'airport'])
+    for (const role of ['a', 'b', 'lobby', 'airport', 'softbody'])
         worlds.push(await startWorld(role, portByLocation));
     let stopping = false;
     const stop = async () => {
@@ -47,7 +49,7 @@ async function main() {
     };
     process.once('SIGINT', stop);
     process.once('SIGTERM', stop);
-    console.log('[orchestrator] Location A, Location B, lobby, and Denver Skyport are ready.');
+    console.log('[orchestrator] Location A, Location B, Soft Body Demo, lobby, and Denver Skyport are ready.');
 }
 main().catch((error) => {
     console.error(`Open Spatial Lab world servers failed: ${error.message}`);

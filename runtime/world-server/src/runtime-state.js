@@ -33,6 +33,7 @@ const FABRIC_PORTAL_FRAME_PRESETS = {
     'location-b': { forward: [-1, 0, 0] },
     'location-lobby': { forward: [0, 0, 1] },
     'location-airport': { forward: [0, 0, 1] },
+    'location-softbody': { forward: [0, 0, 1] },
 };
 const FABRIC_PORTAL_FRAME_WIDTH_M = 1.8;
 const FABRIC_PORTAL_FRAME_HEIGHT_M = 2.8;
@@ -61,6 +62,7 @@ const DEMO_WORLD_BASE_COLOR = {
     'location-b': '#592b14',
     'location-lobby': '#1c4030',
     'location-airport': '#15364a',
+    'location-softbody': '#110000',
 };
 const DEMO_PORTAL_LOADING_BRAND = {
     'location-a': {
@@ -86,6 +88,12 @@ const DEMO_PORTAL_LOADING_BRAND = {
         tagline: 'Denver Skyport - Concourse A and Gate A12',
         estimated_load_ms: 2600,
         instructions: ['WASD to walk', 'Gate A12 is down the concourse', 'return portal is behind the entry spawn'],
+    },
+    'location-softbody': {
+        accent_hex: '#220000',
+        tagline: 'Soft Body Demo - X3D JSON',
+        estimated_load_ms: 10000,
+        instructions: ['Scroll to walk', 'the return portal is behind you', 'drag to orbit the camera'],
     },
 };
 const PRESENCE_TTL_DEFAULT_MS = 10000;

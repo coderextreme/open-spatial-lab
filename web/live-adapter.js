@@ -46,6 +46,7 @@ import { runFormatIndependenceScenario, buildFormatIndependencePanel, feature_CB
 import { runFactoryFloorSomDemo, somGatingPanelRecord, feature_SOM_CONFORMANCE } from "./manifest/som-branch-auth.mjs";
 const BASE_A = withBase("/api/a");
 const BASE_B = withBase("/api/b");
+const BASE_SOFTBODY = withBase("/api/softbody");
 const BASE_LOBBY = withBase("/api/lobby");
 const BASE_AIRPORT = withBase("/api/airport");
 const HOSTED_ATTACH_POINT_EVENT = "hostedattachpoint";
@@ -86,6 +87,15 @@ const ENDPOINTS = Object.freeze({
         session_id: "local-session-airport",
         portal_id: "airport-portal-lobby",
     },
+    softbody: {
+        endpoint_key: "softbody",
+        proxy_base: BASE_SOFTBODY,
+        backend_base_url: "http://127.0.0.1:18155",
+        location_id: "location-softbody",
+        world_id: "world-soft-body",
+        session_id: "local-session-softbody",
+        portal_id: "softbody-portal-lobby",
+    },
 });
 const WORLD_LIMIT = 5.4;
 const MOVE_SPEED_MPS = 2.35;
@@ -111,6 +121,8 @@ function endpointKeyForRole(role, active) {
         return "lobby";
     if (requested === "airport")
         return "airport";
+    if (requested === "c")
+        return "softbody";
     if (role === "player" && !requested)
         return "lobby";
     return role === "target" ? "b" : "a";

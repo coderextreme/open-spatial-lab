@@ -79,6 +79,7 @@ export function mountDemoLauncher(root, options = {}) {
     }
     const catalog = options.catalog || createDemoLauncherCatalog({
         airportAvailable: options.airportAvailable === true,
+        softBodyAvailable: options.softBodyAvailable === true,
     });
     validateDemoLauncherCatalog(catalog);
     const technologies = options.technologies || DEMO_TECHNOLOGIES;
@@ -353,6 +354,16 @@ export function mountDemoLauncher(root, options = {}) {
             navigationCommitted = true;
             setStoredMissionId(missionId);
             options.launchPortalC(result.mission);
+            return;
+        }
+        if (result.mission.launchMode === "portal-d-gated") {
+            if (typeof options.launchPortalD !== "function") {
+                setLiveText("Soft Body demo needs the (Phase B?) Portal D integration hook before it can launch.");
+                return;
+            }
+            navigationCommitted = true;
+            setStoredMissionId(missionId);
+            options.launchPortalD(result.mission);
             return;
         }
         navigationCommitted = true;

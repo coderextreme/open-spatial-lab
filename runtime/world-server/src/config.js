@@ -1,5 +1,6 @@
 'use strict';
 const AIRPORT_WORLD_GRAPH = require('../../../web/worlds/denver-skyport.json');
+const SOFT_BODY_WORLD_GRAPH = require('../../../web/worlds/soft-body.json');
 const NODES = {
     lobby: {
         location_id: 'location-lobby',
@@ -34,7 +35,7 @@ const NODES = {
                 arrival: { position: [0, 0, 3.6], rotation_y: Math.PI },
                 spatial_fabric: { prefetch_radius_m: 3.0, roi_radius_m: 5.0 },
                 traversal: { mode: 'bidirectional' },
-            }, {
+            }, { 
                 portal_id: 'lobby-portal-c',
                 label: 'Portal to Denver Skyport',
                 source_location_id: 'location-lobby',
@@ -45,6 +46,20 @@ const NODES = {
                 target_portal_id: 'airport-portal-lobby',
                 trigger: { position: [0, 0, -4.4], radius_m: 1.25 },
                 arrival: { position: [0, 0, -3.0], rotation_y: 0 },
+                spatial_fabric: { prefetch_radius_m: 3.0, roi_radius_m: 24.0 },
+                traversal: { mode: 'bidirectional' },
+                reciprocal: { mode: 'automatic' },
+            }, {
+                portal_id: 'lobby-portal-d',
+                label: 'Soft Body Demo - X3D JSON',
+                source_location_id: 'location-lobby',
+                source_world_id: 'demo-lobby',
+                target_location_id: 'location-softbody',
+                target_world_id: 'world-soft-body',
+                target_base_url: 'http://127.0.0.1:18155',
+                target_portal_id: 'softbody-portal-lobby',
+                trigger: { position: [4.0, 0, 4.4], radius_m: 1.25 },
+                arrival: { position: [4.0, 0, 3.0], rotation_y: 0 },
                 spatial_fabric: { prefetch_radius_m: 3.0, roi_radius_m: 24.0 },
                 traversal: { mode: 'bidirectional' },
                 reciprocal: { mode: 'automatic' },
@@ -144,6 +159,29 @@ const NODES = {
                 traversal: { mode: 'bidirectional' },
             }],
     },
+    softbody: {
+        location_id: 'location-softbody',
+        world_id: 'world-soft-body',
+        session_id: 'local-session-softbody',
+        http_port: Number(process.env.OSL_BACKEND_SOFTBODY_PORT) || 18155,
+        node_role: 'source',
+        title: 'Soft Body Demo - X3D JSON',
+        authored_wow_graph: SOFT_BODY_WORLD_GRAPH,
+        portals: [{
+                portal_id: 'softbody-portal-lobby',
+                label: 'Portal to Lobby',
+                source_location_id: 'location-softbody',
+                source_world_id: 'world-soft-body',
+                target_location_id: 'location-lobby',
+                target_world_id: 'demo-lobby',
+                target_base_url: 'http://127.0.0.1:18153',
+                target_portal_id: 'lobby-portal-d',
+                trigger: { position: [0, 0, 4.4], radius_m: 1.25 },
+                arrival: { position: [0, 0, -0.4], rotation_y: 0 },
+                spatial_fabric: { prefetch_radius_m: 3.0, roi_radius_m: 5.0 },
+                traversal: { mode: 'bidirectional' },
+            }],
+    },
 };
 function traversalOverrideFor(portalId) {
     const raw = process.env.OSL_PORTAL_TRAVERSAL_OVERRIDES;
@@ -228,7 +266,7 @@ function makeConfig(role, extraOpts) {
     const key = String(role).toLowerCase().replace('location-', '');
     const base = NODES[key];
     if (!base)
-        throw new Error('unknown node role "' + role + '" (expected a|b|lobby|airport|location-a|location-b|location-lobby|location-airport)');
+        throw new Error('unknown node role "' + role + '" (expected a|b|lobby|airport|location-a|location-b|locaion-softbody|location-lobby|location-airport)');
     const cfg = Object.assign({}, base, extraOpts || {});
     cfg.portals = (cfg.portals || []).map(portal => {
         const override = traversalOverrideFor(portal.portal_id);

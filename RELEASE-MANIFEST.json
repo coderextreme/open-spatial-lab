@@ -1437,6 +1437,13 @@
       "classification": "browser-runtime",
       "license": "Apache-2.0"
     },
+    {  "path": "web/worlds/soft-body.json",
+      "mode": "100644",
+      "size": 20741,
+      "sha256": "2c716b4a76dafc5c77f613959d5fe450fa53b4129675af21dc1d5642a7a7814d",
+      "classification": "browser-runtime",
+      "license": "Apache-2.0"
+    },
     {
       "path": "web/wow-scene.mjs",
       "mode": "100644",

@@ -42,7 +42,7 @@ export function recoverAirportLobbyPortalResources(clientMode, wowWorld, wowPort
         });
     if (!exactStalePair)
         return wowPortals;
-    return [...wowPortals, {
+    return [...wowPortals, ...[{
             id: 3,
             label: "Portal to Denver Skyport",
             geoPose: {
@@ -112,7 +112,78 @@ export function recoverAirportLobbyPortalResources(clientMode, wowWorld, wowPort
                     first_party_teleportxr_browser_rendering: false,
                     standards_conformance: false,
                 },
-        }];
+        }, {
+            id: 4,
+            label: "Portal to Soft Body Demo",
+            geoPose: {
+                position: { lat: 4.4, lan: 0, h: 0 },
+                angles: { yaw: 0, pitch: 0, roll: 0 },
+            },
+            destination: {},
+            webofworlds_extension: {
+                portal_id: "lobby-portal-d",
+                wow_id: 4,
+                wow_resource: "/wow/portal/4",
+                legacy_alias_endpoint: "/wow/portal/lobby-portal-d",
+                source_location_id: "location-lobby",
+                source_world_id: "demo-lobby",
+                target_fixture: {
+                    spatial_id: "world-soft-body",
+                    graph_endpoint: "/worlds/soft-body.json",
+                },
+                handoff_behavior: "client-scene-load (same browser/player; no application-level handoff)",
+                native_teleportxr_teleport: false,
+                trigger: { position: [0, 0, -4.4], radius_m: 1.25 },
+                arrival: { position: [0, 0, -3], rotation_y: 0 },
+                zones: {
+                    prefetch: {
+                        type: "portal_center_planar_radius",
+                        radius_m: 3,
+                        hysteresis_ratio: 1.15,
+                        armed_entry_sides: ["front", "back"],
+                    },
+                    traversal: {
+                        type: "oval_frame_plane_crossing",
+                        width_m: 1.8,
+                        height_m: 2.8,
+                        trigger_depth_m: 0.8,
+                        armed_entry_sides: ["front", "back"],
+                    },
+                    invariant: "prefetch.radius_m > width_m/2 + trigger_depth_m + 0.5",
+                    invariant_min_prefetch_radius_m: 2.2,
+                    invariant_ok: true,
+                },
+                traversal_mode: "bidirectional",
+                traversal: {
+                    mode: "bidirectional",
+                    transition: CLIENT_SCENE_LOAD_TRANSITION,
+                    allowed_entry_side: "both",
+                    blocked_entry_side: null,
+                    side_reference: "portal_frame_forward",
+                    frame_forward: [0, 0, 1],
+                    validation: {
+                        traversal_direction_standard_conformance: false,
+                        application_level: true,
+                    },
+                },
+                reciprocal: {
+                    mode: "automatic",
+                    validation: {
+                        automatic_reciprocal_standard_conformance: false,
+                        application_level: true,
+                    },
+                },
+            },
+            proof_boundary: wowWorld.proof_boundary && typeof wowWorld.proof_boundary === "object"
+                ? { ...wowWorld.proof_boundary }
+                : {
+                    application_level_handoff: true,
+                    native_teleportxr_teleport: false,
+                    first_party_teleportxr_browser_rendering: false,
+                    standards_conformance: false,
+                },
+        },
+    	]];
 }
 export function clientSceneLoadFieldsFromWowPortal(wowPortal) {
     const ext = wowPortal && wowPortal.webofworlds_extension;

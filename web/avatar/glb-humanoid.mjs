@@ -1,4 +1,4 @@
-import * as THREE from "../vendor/scene-core/vendor/three/three.module.js";
+import * as THREE from "three";
 import { VRMHumanoid } from "../vendor-vrm/three-vrm.module.js";
 import { MIXAMO_TO_VRM, measureAnatomicalFrame } from "../procedural-animation.js";
 const BASE_TO_VRM_BONE = Object.freeze(Object.entries(MIXAMO_TO_VRM).reduce((map, [mixamoName, vrmBone]) => {

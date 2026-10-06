@@ -12,7 +12,8 @@ BACKEND_A_PORT="${OSL_BACKEND_A_PORT:-18151}"
 BACKEND_B_PORT="${OSL_BACKEND_B_PORT:-18152}"
 BACKEND_LOBBY_PORT="${OSL_BACKEND_LOBBY_PORT:-18153}"
 BACKEND_AIRPORT_PORT="${OSL_BACKEND_AIRPORT_PORT:-18154}"
-PORTS=("$BACKEND_A_PORT" "$BACKEND_B_PORT" "$BACKEND_LOBBY_PORT" "$BACKEND_AIRPORT_PORT" "$FRONTEND_PORT")
+BACKEND_SOFTBODY_PORT="${OSL_BACKEND_SOFTBODY_PORT:-18155}"
+PORTS=("$BACKEND_A_PORT" "$BACKEND_B_PORT" "$BACKEND_LOBBY_PORT" "$BACKEND_AIRPORT_PORT" "$FRONTEND_PORT" "$BACKEND_SOFTBODY_PORT")
 
 for command in node npm curl lsof; do
   if ! command -v "$command" >/dev/null 2>&1; then
@@ -75,6 +76,8 @@ trap - ERR
 printf '\nOpen Spatial Lab is ready.\n'
 printf 'Launcher:            http://127.0.0.1:%s/\n' "$FRONTEND_PORT"
 printf 'Lobby player:        http://127.0.0.1:%s/index.html?role=player&intro=bypass\n' "$FRONTEND_PORT"
+printf 'Soft Body Demo:      http://127.0.0.1:%s/softbody.html?role=player&intro=bypass\n' "$FRONTEND_PORT"
 printf 'Location A observer: http://127.0.0.1:%s/index.html?role=source&intro=bypass\n' "$FRONTEND_PORT"
 printf 'Location B observer: http://127.0.0.1:%s/index.html?role=target&intro=bypass\n' "$FRONTEND_PORT"
+printf 'Soft Body  observer: http://127.0.0.1:%s/softbody.html?role=source&intro=bypass\n' "$FRONTEND_PORT"
 printf 'Stop:                npm stop\n'

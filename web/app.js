@@ -12,7 +12,7 @@ import { inventorySlots, equipmentCatalog, validateEquippedItems, resolveEquipme
 import { Scene } from "./vendor/scene-core/scene.js";
 import { mountCanonicalWorldContent } from "./vendor/scene-core/canonical-world-content.js";
 import { FRONTEND_CONTRACT, HANDOFF_PHASES, PROVENANCE, } from "./vendor/scene-core/frontend-contract.js";
-import * as THREE from "three";
+import * as THREE from "three/webgpu";
 import { parseWorldUrl } from "./wow-url.mjs";
 import { apiBase } from "./base-path.mjs";
 import { reconcileKeyedHtml } from "./reconcile-keyed-html.mjs";
@@ -1476,7 +1476,7 @@ function setupWorldNavigatorRender() {
         suppressReturnPortal: true,
     });
     impl.scene.add(group);
-    const renderTarget = new THREE.WebGLRenderTarget(768, 768, {
+    const renderTarget = new THREE.RenderTarget(768, 768, {
         minFilter: THREE.LinearFilter,
         magFilter: THREE.LinearFilter,
     });
@@ -3654,6 +3654,9 @@ async function main() {
     };
     if (isPlayer && launcherMissionParam === "denver-skyport") {
         document.body.setAttribute("data-denver-skyport-mission", "portal-c-server-backed");
+    }
+    if (isPlayer && launcherMissionParam === "soft-body") {
+        document.body.setAttribute("data-soft-body-mission", "portal-d-server-backed");
     }
     document.body.setAttribute("data-assembly-ready", "1");
     mirrorDataset(window.__assembly.debugState());

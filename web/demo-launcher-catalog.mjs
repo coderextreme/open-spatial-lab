@@ -1,4 +1,4 @@
-const SERVICE_PORTS = Object.freeze([18151, 18152, 18153]);
+const SERVICE_PORTS = Object.freeze([18151, 18152, 18153, 18155]);
 export const PRIMARY_MISSION_IDS = Object.freeze([
     "player-lobby",
     "server-a-observer",
@@ -252,12 +252,28 @@ export function validateDemoLauncherCatalog(catalog) {
                 throw new Error("Denver Skyport copy overclaims its client-side scene-load path.");
             }
         }
+        if (mission.id === "soft-body") {
+            const airportClaims = [
+                mission.description,
+                mission.capabilityBadge,
+                mission.who,
+                mission.where,
+                mission.reality,
+            ].join(" ");
+            if (mission.viewKind !== "destination" || mission.backingNode !== null) {
+                throw new Error("Soft Body Demo must remain a client-side destination, not a server view.");
+            }
+            if (/third server|airport server|server-backed|seamless backend|seamless teleport/i.test(airportClaims)) {
+                throw new Error("Soft Body Demo Denver Skyport copy overclaims its client-side scene-load path.");
+            }
+        }
     }
     const expectedGroups = new Map([
         ["player-lobby", "player"],
         ["server-a-observer", "servers"],
         ["server-b-observer", "servers"],
         ["denver-skyport", "destinations"],
+        ["soft-body", "destinations"],
         ["player-location-a", "destinations"],
         ["player-location-b", "destinations"],
     ]);
@@ -275,6 +291,7 @@ export function validateDemoLauncherCatalog(catalog) {
 }
 export function createDemoLauncherCatalog(options = {}) {
     const airportAvailable = options.airportAvailable === true;
+    const softBodyAvailable = options.softBodyAvailable === true;
     const catalog = [
         {
             id: "player-lobby",
@@ -349,6 +366,27 @@ export function createDemoLauncherCatalog(options = {}) {
             accent: "airport",
             primary: true,
             launchMode: "portal-c-gated",
+        },
+        {
+            id: "soft-body",
+            label: "Soft Body Demo",
+            description: "A client-side Soft Body Demo entered through the real lobby and Portal D path.",
+            viewKind: "destination",
+            launcherGroup: "destinations",
+            target: "softbody.html?role=player",
+            backingNode: null,
+            availability: softBodyAvailable ? "available" : "unavailable",
+            availabilityReason: softBodyAvailable
+                ? "Available through the lobby Portal D route."
+                : "The soft body demo  is unavailable.",
+            capabilityBadge: softBodyAvailable ? "DESTINATION" : "PORTAL D PENDING",
+            who: "An embodied player",
+            where: "A client-loaded destination beyond the lobby",
+            reality: "Player view entered through the lobby Portal D path",
+            emblem: "C",
+            accent: "server-c",
+            primary: true,
+            launchMode: "portal-d-gated",
         },
         {
             id: "player-location-a",
